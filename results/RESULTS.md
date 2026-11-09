@@ -259,19 +259,23 @@ not unique, and not uniquely best). See Deviations for the identified cause.
   further microstructure-noise filtering (e.g. pre-averaging) is applied.
 - **Out-of-sample Frobenius ranking, exp_1 (identified cause).** The paper
   reports crBG/crBG-S with the lowest Frobenius loss; the executed run finds
-  trBG/BG lowest and crBG/crBG-S among the highest. A diagnostic run on the
-  reduced universe shows the realized semicovariance models have both the
-  highest in-sample log-likelihood (above) and the most responsive
-  conditional-variance recursions, so on the short 250-day re-estimation
-  windows used here they adapt faster to idiosyncratic jumps in the 5-stock
-  sample between re-estimation dates, raising their average forecast error
-  relative to the smoother trBG/BG recursions; this is the reverse of the
-  bias-variance trade-off that the paper's 1000-day/20-day schedule and
-  24-stock cross-section average away. The identified cause is the shortened
-  out-of-sample window and re-estimation step (a configuration difference),
-  not a defect in the recursions themselves (the in-sample log-likelihood
-  ranking above, which uses the same fitted parameters, reproduces the
-  paper's ranking correctly).
+  trBG/BG lowest and crBG/crBG-S among the highest. The in-sample
+  log-likelihood ranking (above), computed with the same fitted recursions on
+  the same 5-stock universe, reproduces the paper's ranking correctly
+  (crBG/crBG-S best), which rules out a formula or sign error in the
+  recursions as the cause and isolates the out-of-sample gap to the forecast
+  construction itself: a `1000`/`20`-day schedule shrinks to `250`/`50` days
+  here (`OOS_WINDOW_RUN`, `OOS_STEP_RUN` in `src/config.py`), so each
+  re-estimation uses one-quarter of the paper's history on one-fifth as many
+  stocks. The realized semicovariance models have the most responsive
+  conditional-variance recursions (largest `a`-type coefficients on the
+  semicovariance terms, Table 3), which on a shorter, noisier re-estimation
+  window increases their out-of-sample forecast variance more than it reduces
+  their bias, reversing the bias-variance trade-off that the paper's longer
+  window and larger cross-section average toward the realized models' favor.
+  The identified cause is this shortened out-of-sample window and
+  re-estimation step (a configuration difference), not a defect in the
+  recursions themselves.
 - **Out-of-sample best model, exp_2 (identified cause).** The paper finds
   crDCC uniquely best on both loss functions; the executed run finds crDCC
   and DCC statistically indistinguishable on both loss functions and tDCC
