@@ -1,0 +1,25 @@
+/usr/local/lib/python3.12/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+/usr/local/lib/python3.12/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+/usr/local/lib/python3.12/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+/usr/local/lib/python3.12/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+/usr/local/lib/python3.12/site-packages/scipy/optimize/_slsqp_py.py:438: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  g = append(wrapped_grad(x), 0.0)
+/usr/local/lib/python3.12/site-packages/scipy/optimize/_slsqp_py.py:498: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  a_ieq = vstack([con['jac'](x, *con['args'])
+/usr/local/lib/python3.12/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+exp1: tickers=['AAPL', 'MSFT', 'INTC', 'CSCO', 'GE'], market=SPY, 2005-01-01..2014-12-31, window=250, step=50, irf_paths=20000, full=False
+AAPL: 2516 trading days, 2005-01-04 to 2014-12-31
+AAPL: fitted 8 models + NIS + IRF + OOS in 328.9s
+MSFT: 2516 trading days, 2005-01-04 to 2014-12-31
+MSFT: fitted 8 models + NIS + IRF + OOS in 328.4s
+INTC: 2516 trading days, 2005-01-04 to 2014-12-31
+INTC: fitted 8 models + NIS + IRF + OOS in 324.4s
+CSCO: 2516 trading days, 2005-01-04 to 2014-12-31
+CSCO: fitted 8 models + NIS + IRF + OOS in 364.1s
+GE: 2516 trading days, 2005-01-04 to 2014-12-31
+GE: fitted 8 models + NIS + IRF + OOS in 327.6s

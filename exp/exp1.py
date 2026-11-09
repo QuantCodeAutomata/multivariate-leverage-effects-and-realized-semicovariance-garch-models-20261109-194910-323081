@@ -80,7 +80,12 @@ def oos_forecast_one_stock(data: dict, window: int, step: int) -> dict[str, dict
                                           Mp[t - 1:t - 1 + horizon + 1], Mn[t - 1:t - 1 + horizon + 1])
         for name in MODEL_NAMES:
             fit = fits[name]
-            H_path = run_recursion(fit["beta"], fit["coefs"], full_regs_all[name], h_bar)
+            # Seed the forecast path at the model's own last in-sample filtered
+            # H_{t-1}, not at h_bar, so the estimated persistence (beta) carries
+            # over into the out-of-sample window instead of being reset to the
+            # unconditional mean at every re-estimation (see matrix_garch.run_recursion).
+            H_path = run_recursion(fit["beta"], fit["coefs"], full_regs_all[name], h_bar,
+                                    h_init=fit["H"][-1])
             forecasts[name].extend(list(H_path[1:1 + horizon]))
         realized_oos.extend(list(RCOV[t:t + horizon]))
         t += step

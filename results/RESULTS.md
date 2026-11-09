@@ -89,19 +89,19 @@ executed stocks and over the out-of-sample rolling windows (`OOS_WINDOW_RUN` =
 
 | Model | BG | tBG | rBG | trBG | crBG | tBG-S | trBG-S | crBG-S |
 |---|---|---|---|---|---|---|---|---|
-| Frobenius | 4.794e-4 | 4.832e-4 | 4.846e-4 | 4.775e-4 | 4.916e-4 | 4.845e-4 | **4.802e-4** | 4.913e-4 |
-| Frobenius in 80% MCS | yes | yes | no | yes | no | no | yes | no |
-| QLIKE | -15.72 | -16.02 | -16.81 | -16.21 | -15.20 | -14.91 | -14.63 | -14.68 |
+| Frobenius | 4.558e-4 | **4.540e-4** | 4.819e-4 | 4.746e-4 | 4.883e-4 | 4.556e-4 | 4.768e-4 | 4.868e-4 |
+| Frobenius in 80% MCS | yes | yes | no | no | no | yes | no | no |
+| QLIKE | -15.63 | -15.77 | -15.49 | -16.24 | -15.28 | -15.30 | -14.71 | -14.64 |
 | QLIKE in 80% MCS | yes | yes | yes | yes | yes | yes | yes | yes |
 
 The paper reports crBG-S with the lowest out-of-sample Frobenius loss
 (about 17.02 on its scale) and inclusion in the 80% MCS for 62.5% of its
-24 stocks. In the executed run, trBG attains the lowest average Frobenius
-loss and crBG-S is excluded from the Frobenius MCS in this smaller universe;
-every model is retained by the QLIKE MCS, so QLIKE does not discriminate
-among models on this slice. **Verdict: not reproduced** for the Frobenius
-ranking (BG/trBG/trBG-S dominate crBG/crBG-S here, opposite of the paper);
-see Deviations for the identified cause.
+24 stocks. In the executed run, tBG attains the lowest average Frobenius
+loss and crBG/crBG-S are excluded from the Frobenius MCS in this smaller
+universe; every model is retained by the QLIKE MCS, so QLIKE does not
+discriminate among models on this slice. **Verdict: not reproduced** for the
+Frobenius ranking (BG/tBG/tBG-S dominate crBG/crBG-S here, opposite of the
+paper); see Deviations for the identified cause.
 
 ## Experiment 2: High-Dimensional DCC Models with Realized Semicorrelations
 
@@ -154,9 +154,9 @@ universe, and the 9/11 window (2001) precedes the executed sample start of
 
 | Model | DCC | rDCC | crDCC | tDCC | trDCC |
 |---|---|---|---|---|---|
-| Frobenius | 9.770e-4 | 9.791e-4 | 9.791e-4 | **9.771e-4** | 9.815e-4 |
+| Frobenius | **9.753e-4** | 9.800e-4 | 9.780e-4 | 9.771e-4 | 9.822e-4 |
 | Frobenius in 80% MCS | yes | no | yes | yes | no |
-| QLIKE | -36.95 | -36.94 | -36.93 | 1.609e5 | -36.91 |
+| QLIKE | -36.95 | -36.94 | -36.94 | 1.079e5 | -36.90 |
 | QLIKE in 80% MCS | yes | yes | yes | no | no |
 
 The paper reports crDCC with the lowest out-of-sample Frobenius loss (2297.3)
@@ -164,7 +164,7 @@ and QLIKE loss (31.347) and sole inclusion in both 80% MCS sets (p = 1.000).
 In the executed run DCC (not crDCC) attains the lowest Frobenius loss by a
 margin smaller than one bootstrap standard error, and crDCC is retained by
 both MCS sets but is not the uniquely best model; tDCC's QLIKE loss is driven
-by a single ill-conditioned rolling window (a 1.6e5 outlier against losses of
+by a single ill-conditioned rolling window (a 1.08e5 outlier against losses of
 about -37 elsewhere). **Verdict: not reproduced** for "crDCC uniquely best";
 **partially reproduced** for "crDCC included in both 80% MCS" (true here, but
 not unique). See Deviations for the identified cause.

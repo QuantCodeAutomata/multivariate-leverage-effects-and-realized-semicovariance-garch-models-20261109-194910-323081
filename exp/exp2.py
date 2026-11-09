@@ -98,7 +98,11 @@ def oos_forecast_system(data: dict, h_uni: np.ndarray, window: int, step: int) -
                                           Mn[t - 1:t - 1 + horizon + 1])
         for name in DCC_MODEL_NAMES:
             fit = fit_dcc(regs_est[name], z_est, q_bar)
-            Q_path = run_recursion(fit["beta"], fit["coefs"], regs_fore[name], q_bar)
+            # Continue the correlation path from the model's own last in-sample
+            # filtered Q_{t-1} instead of resetting to q_bar at every
+            # re-estimation (see matrix_garch.run_recursion, h_init).
+            Q_path = run_recursion(fit["beta"], fit["coefs"], regs_fore[name], q_bar,
+                                    h_init=fit["Q"][-1])
             R_path = to_correlation(Q_path)
             Dmat = np.sqrt(h_uni[t - 1:t - 1 + horizon + 1])
             H_path = R_path * Dmat[:, :, None] * Dmat[:, None, :]

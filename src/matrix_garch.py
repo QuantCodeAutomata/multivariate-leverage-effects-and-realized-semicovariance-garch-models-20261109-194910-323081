@@ -39,18 +39,26 @@ class ModelSpec:
 
 
 def run_recursion(beta: float, coefs: dict[str, float], regressors: dict[str, np.ndarray],
-                   h_bar: np.ndarray) -> np.ndarray:
+                   h_bar: np.ndarray, h_init: np.ndarray | None = None) -> np.ndarray:
     """Filter the covariance path H_1..H_T (Eqs. (5)-(11) generic form).
 
-    ``H_1 = h_bar`` is the presample value; ``H_t`` for t >= 2 is built from
-    regressors dated t-1, so no future information enters H_t (no look-ahead).
+    ``h_bar`` fixes the covariance-targeting constant (the long-run mean the
+    recursion reverts to). The presample value ``H_1`` defaults to ``h_bar``
+    (the in-sample estimation assumption), but can be overridden with
+    ``h_init`` -- the last covariance filtered on the estimation window --
+    when this recursion continues a path out-of-sample instead of starting
+    one: re-seeding an out-of-sample forecast at the unconditional mean
+    rather than at the model's own last filtered value discards the
+    persistence the recursion was estimated to have (``beta`` close to the
+    stationary bound), and no future information enters either way since
+    ``H_t`` for t >= 2 is built from regressors dated t-1.
     """
     any_reg = next(iter(regressors.values()))
     T, n, _ = any_reg.shape
     x_bar = {k: v.mean(axis=0) for k, v in regressors.items()}
     const = h_bar * (1.0 - beta) - sum(coefs[k] * x_bar[k] for k in coefs)
     H = np.empty((T, n, n))
-    H[0] = h_bar
+    H[0] = h_bar if h_init is None else h_init
     for t in range(1, T):
         H[t] = const + beta * H[t - 1] + sum(coefs[k] * regressors[k][t - 1] for k in coefs)
     return H
