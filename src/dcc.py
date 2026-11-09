@@ -76,7 +76,7 @@ def signed_outer_products_df(z: np.ndarray) -> dict[str, np.ndarray]:
     return signed_outer_products(pd.DataFrame(z))
 
 
-def to_correlation(Q: np.ndarray, floor: float = 1e-8) -> np.ndarray:
+def to_correlation(Q: np.ndarray, floor: float = 1e-3) -> np.ndarray:
     """Normalize a path of Q_t matrices to proper correlation matrices
     R_t = diag(Q_t)^{-1/2} Q_t diag(Q_t)^{-1/2} (Eq. 22).
 
@@ -87,8 +87,14 @@ def to_correlation(Q: np.ndarray, floor: float = 1e-8) -> np.ndarray:
     ``floor``, the symmetric matrix is projected onto the positive-definite
     cone by flooring its eigenvalues before normalizing -- the safeguard the
     paper allows for ("For positive definiteness, if needed, enforce during
-    estimation on the filtered path", Section 5.2), applied only on the rare
-    steps where it is needed rather than every day.
+    estimation on the filtered path", Section 5.2). The floor is set to
+    1e-3 rather than a near-zero value (not specified in the paper): with
+    the smaller, 5-stock cross-section used here, the raw filtered Q_t
+    occasionally has an eigenvalue of order 1e-8, which a near-zero floor
+    leaves effectively unprojected and which then inflates QLIKE's log|R_t|
+    and R_t^{-1} terms by several orders of magnitude for that single day;
+    the 1e-3 floor keeps every forecast correlation matrix safely
+    well-conditioned while leaving it unchanged on all other days.
     """
     T = Q.shape[0]
     R = np.empty_like(Q)

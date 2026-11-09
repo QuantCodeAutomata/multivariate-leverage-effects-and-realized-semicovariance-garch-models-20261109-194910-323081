@@ -156,18 +156,25 @@ universe, and the 9/11 window (2001) precedes the executed sample start of
 |---|---|---|---|---|---|
 | Frobenius | **9.753e-4** | 9.800e-4 | 9.780e-4 | 9.771e-4 | 9.822e-4 |
 | Frobenius in 80% MCS | yes | no | yes | yes | no |
-| QLIKE | -36.95 | -36.94 | -36.94 | 1.079e5 | -36.90 |
+| QLIKE | **-36.95** | -36.94 | -36.94 | -35.83 | -36.90 |
 | QLIKE in 80% MCS | yes | yes | yes | no | no |
+
+(Values from `results/exp2_results.json`, key `oos_mcs`, after carrying the
+filtered `Q_t` forward across re-estimation windows instead of resetting it to
+`Q-bar`, which removed a transient near-singular correlation matrix at the
+first post-re-estimation observation of a few rolling windows.)
 
 The paper reports crDCC with the lowest out-of-sample Frobenius loss (2297.3)
 and QLIKE loss (31.347) and sole inclusion in both 80% MCS sets (p = 1.000).
-In the executed run DCC (not crDCC) attains the lowest Frobenius loss by a
-margin smaller than one bootstrap standard error, and crDCC is retained by
-both MCS sets but is not the uniquely best model; tDCC's QLIKE loss is driven
-by a single ill-conditioned rolling window (a 1.08e5 outlier against losses of
-about -37 elsewhere). **Verdict: not reproduced** for "crDCC uniquely best";
+In the executed run DCC (not crDCC) attains the lowest loss on both criteria
+by a margin smaller than one bootstrap standard error, and crDCC is retained
+by both 80% MCS sets but is not the uniquely best model; tDCC has the worst
+QLIKE loss and is excluded from the QLIKE MCS, consistent with the paper's
+finding that the purely sign-based threshold model is dominated by the
+realized-measure models, but trDCC (not tDCC) is the model excluded from the
+Frobenius MCS here. **Verdict: not reproduced** for "crDCC uniquely best";
 **partially reproduced** for "crDCC included in both 80% MCS" (true here, but
-not unique). See Deviations for the identified cause.
+not unique, and not uniquely best). See Deviations for the identified cause.
 
 ## Deviations from the paper
 
@@ -267,12 +274,20 @@ not unique). See Deviations for the identified cause.
   paper's ranking correctly).
 - **Out-of-sample best model, exp_2 (identified cause).** The paper finds
   crDCC uniquely best on both loss functions; the executed run finds crDCC
-  and DCC statistically indistinguishable on Frobenius loss and tDCC's QLIKE
-  loss dominated by one rolling window with an ill-conditioned correlation
-  matrix. With only 5 of the paper's 24 series, the DCC cross-section no
-  longer averages out single-window estimation noise the way the 24x24
-  system does, which is the identified cause of the smaller, model-independent
-  Frobenius gap and the tDCC QLIKE outlier.
+  and DCC statistically indistinguishable on both loss functions and tDCC
+  with the worst QLIKE loss. An earlier version of the rolling forecast reset
+  the filtered `Q_t` to the unconditional `Q-bar` at the start of each
+  200-day re-estimation window; for a few windows this produced a transient
+  near-singular correlation matrix at the first post-reset observation and a
+  QLIKE outlier of order 1e5 for the sign-based tDCC recursion. Carrying the
+  filtered `Q_t` forward across re-estimation windows (`h_init` in
+  `src/matrix_garch.py`) removed the transient and left tDCC genuinely worse
+  than the other four models but on the same order of magnitude (about -36 to
+  -37, Section 5.5 table above), which is the correct qualitative ranking;
+  with only 5 of the paper's 24 series, the DCC cross-section no longer
+  averages out single-window estimation noise the way the 24x24 system does,
+  which is the identified cause of the remaining small, model-independent
+  Frobenius and QLIKE gap between DCC and crDCC.
 
 ## Not reproduced
 
