@@ -19,7 +19,7 @@ from __future__ import annotations
 import numpy as np
 from arch import arch_model
 
-from src.matrix_garch import fit_covariance_targeted_garch
+from src.matrix_garch import fit_covariance_targeted_garch, gaussian_qmle_loglik
 
 UNIVARIATE_MODELS = ["GARCH", "tGARCH", "rGARCH", "trGARCH", "crGARCH"]
 
@@ -38,11 +38,20 @@ def fit_garch_arch_pkg(returns_pct: np.ndarray, asymmetric: bool) -> dict:
     o = 1 if asymmetric else 0
     am = arch_model(returns_pct, mean="Zero", vol="GARCH", p=1, o=o, q=1, dist="normal")
     res = am.fit(disp="off", show_warning=False)
-    h = res.conditional_volatility ** 2
+    h_pct = np.asarray(res.conditional_volatility) ** 2
+    h_dec = h_pct / 100.0 ** 2
+    returns_dec = returns_pct / 100.0
+    # arch's res.loglikelihood is on the percent-return scale and includes the
+    # 0.5 and -N log(2 pi) terms that src.matrix_garch.gaussian_qmle_loglik
+    # omits; recompute the same QMLE criterion on decimal returns here so that
+    # GARCH/tGARCH are comparable on an identical scale and formula to
+    # rGARCH/trGARCH/crGARCH (Section 5: "the model with highest
+    # log-likelihood is selected" presumes a common likelihood definition).
+    loglik = gaussian_qmle_loglik(h_dec.reshape(-1, 1, 1), returns_dec.reshape(-1, 1))
     return {
-        "loglik": float(res.loglikelihood),
+        "loglik": loglik,
         "params": res.params.to_dict(),
-        "h": h.to_numpy(),
+        "h": h_dec,
         "converged": res.convergence_flag == 0,
     }
 
@@ -60,13 +69,8 @@ def fit_univariate_models(returns: np.ndarray, rv: np.ndarray, pos_var: np.ndarr
     results: dict[str, dict] = {}
     returns_pct = returns * 100.0  # arch package convention; scaled back after
 
-    garch = fit_garch_arch_pkg(returns_pct, asymmetric=False)
-    garch["h"] = garch["h"] / 100.0 ** 2
-    results["GARCH"] = garch
-
-    tgarch = fit_garch_arch_pkg(returns_pct, asymmetric=True)
-    tgarch["h"] = tgarch["h"] / 100.0 ** 2
-    results["tGARCH"] = tgarch
+    results["GARCH"] = fit_garch_arch_pkg(returns_pct, asymmetric=False)
+    results["tGARCH"] = fit_garch_arch_pkg(returns_pct, asymmetric=True)
 
     h_bar = np.array([[np.var(returns)]])
     rv3 = _scalar_regressor(rv)

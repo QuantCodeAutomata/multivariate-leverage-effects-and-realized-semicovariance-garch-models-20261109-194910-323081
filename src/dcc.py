@@ -76,16 +76,44 @@ def signed_outer_products_df(z: np.ndarray) -> dict[str, np.ndarray]:
     return signed_outer_products(pd.DataFrame(z))
 
 
+def to_correlation(Q: np.ndarray, floor: float = 1e-8) -> np.ndarray:
+    """Normalize a path of Q_t matrices to proper correlation matrices
+    R_t = diag(Q_t)^{-1/2} Q_t diag(Q_t)^{-1/2} (Eq. 22).
+
+    The semicorrelation-based regressors (crDCC/tDCC/trDCC, Eqs. 25-27)
+    include the indefinite discordant term aM*R^M_{t-1} (or its z+z-'
+    analogue), so Q_t is not guaranteed to stay positive (semi)definite for
+    N > 2 (Appendix A). When an eigenvalue of Q_t falls at or below
+    ``floor``, the symmetric matrix is projected onto the positive-definite
+    cone by flooring its eigenvalues before normalizing -- the safeguard the
+    paper allows for ("For positive definiteness, if needed, enforce during
+    estimation on the filtered path", Section 5.2), applied only on the rare
+    steps where it is needed rather than every day.
+    """
+    T = Q.shape[0]
+    R = np.empty_like(Q)
+    for t in range(T):
+        Qt = 0.5 * (Q[t] + Q[t].T)
+        d = np.diagonal(Qt)
+        if d.min() <= floor or np.linalg.eigvalsh(Qt).min() <= floor:
+            eigvals, eigvecs = np.linalg.eigh(Qt)
+            eigvals = np.clip(eigvals, floor, None)
+            Qt = (eigvecs * eigvals) @ eigvecs.T
+        dsqrt = np.sqrt(np.diagonal(Qt))
+        R[t] = Qt / np.outer(dsqrt, dsqrt)
+    return R
+
+
 def correlation_qmle_loglik(Q: np.ndarray, z: np.ndarray) -> float:
     """Engle's (2002) second-step DCC quasi-log-likelihood on the normalized
     correlation path R_t (the -log|2 pi| - z'z additive constants, which do
     not depend on the DCC parameters, are dropped as in
     ``matrix_garch.gaussian_qmle_loglik``)."""
-    T, N, _ = Q.shape
+    R_path = to_correlation(Q)
+    T = R_path.shape[0]
     total = 0.0
     for t in range(T):
-        d = np.sqrt(np.clip(np.diagonal(Q[t]), 1e-12, None))
-        R = Q[t] / np.outer(d, d)
+        R = R_path[t]
         sign, logdet = np.linalg.slogdet(R)
         if sign <= 0:
             return -1e12
@@ -127,8 +155,7 @@ def fit_dcc(regressors: dict[str, np.ndarray], z: np.ndarray, q_bar: np.ndarray,
     beta = res.x[0]
     coefs = {name: res.x[i + 1] for i, name in enumerate(names)}
     Q = run_recursion(beta, coefs, regressors, q_bar)
-    d = np.sqrt(np.clip(np.diagonal(Q, axis1=-2, axis2=-1), 1e-12, None))
-    R = Q / (d[:, :, None] * d[:, None, :])
+    R = to_correlation(Q)
     loglik = correlation_qmle_loglik(Q, z)
     return {
         "beta": beta, "coefs": coefs, "loglik": loglik, "Q": Q, "R": R,

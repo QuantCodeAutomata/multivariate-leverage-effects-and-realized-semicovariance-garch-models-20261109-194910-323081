@@ -1,0 +1,11 @@
+exp1: tickers=['AAPL', 'MSFT', 'INTC', 'CSCO', 'GE'], market=SPY, 2005-01-01..2014-12-31, window=250, step=50, irf_paths=20000, full=False
+AAPL: 2516 trading days, 2005-01-04 to 2014-12-31
+AAPL: fitted 8 models + NIS + IRF + OOS in 315.3s
+MSFT: 2516 trading days, 2005-01-04 to 2014-12-31
+MSFT: fitted 8 models + NIS + IRF + OOS in 389.4s
+INTC: 2516 trading days, 2005-01-04 to 2014-12-31
+INTC: fitted 8 models + NIS + IRF + OOS in 406.0s
+CSCO: 2516 trading days, 2005-01-04 to 2014-12-31
+CSCO: fitted 8 models + NIS + IRF + OOS in 430.3s
+GE: 2516 trading days, 2005-01-04 to 2014-12-31
+GE: fitted 8 models + NIS + IRF + OOS in 391.3s

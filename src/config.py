@@ -32,9 +32,12 @@ UNIVERSE_SIZE_PAPER = 24  # number of individual stocks, Section 3
 # start -- to keep bivariate QMLE estimation, Monte-Carlo IRFs, and the 24 (or
 # fewer) dimensional DCC optimizers within the time available for this
 # replication. The cut preserves the paper's method, frequency and ordering.
-UNIVERSE_SIZE_RUN = 8
-DJIA_RUN = ["AAPL", "MSFT", "INTC", "CSCO", "GE", "PFE", "IBM", "GS"]  # top-8
-# of DJIA_24_PAPER by mean (close * volume) daily dollar volume, 2010-2014.
+UNIVERSE_SIZE_RUN = 5
+DJIA_RUN = ["AAPL", "MSFT", "INTC", "CSCO", "GE"]  # top-5
+# of DJIA_24_PAPER by mean (close * volume) daily dollar volume, 2010-2014;
+# cut from the 8 originally selected to let bivariate QMLE on 8 model
+# specifications, Monte-Carlo IRFs and rolling out-of-sample re-estimation
+# finish for every name within the time available for this replication.
 
 SAMPLE_START_PAPER = "2000-01-01"  # Section 3: sample start
 SAMPLE_END_PAPER = "2014-12-31"  # Section 3: sample end (3773 trading days)
@@ -82,7 +85,11 @@ OOS_WINDOW_RUN = 250  # rolling window length (trading days) used in the
 # executed run: proportionally shorter than the paper's 1000-day window to
 # match the shorter 2005-2014 executed sample while leaving enough
 # observations after the window for a meaningful forecast evaluation.
-OOS_STEP_RUN = 20  # re-estimation frequency kept identical to the paper
+OOS_STEP_RUN = 50  # re-estimation frequency widened from the paper's 20 (kept
+# in OOS_STEP_PAPER) so that the rolling QMLE re-estimation of all eight
+# bivariate / five DCC specifications finishes within the time available for
+# this replication; the window length, loss functions and MCS level are
+# unchanged
 MCS_LEVEL = 0.80  # "80% Model Confidence Set", Hansen et al. (2011)
 MCS_BOOT_REPLICATIONS_PAPER_UNSPECIFIED = None  # the paper does not state the
 # number of bootstrap replications or the block length used for the MCS

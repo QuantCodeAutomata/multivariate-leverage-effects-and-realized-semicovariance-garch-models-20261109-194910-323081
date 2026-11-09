@@ -1,0 +1,187 @@
+{
+  "AAPL": {
+    "BG": {
+      "statistic": 4.605348280456487,
+      "p_value": 4.117761117417018e-06,
+      "favors_crBG_S": true
+    },
+    "tBG": {
+      "statistic": 4.087824700771687,
+      "p_value": 4.3543697981540674e-05,
+      "favors_crBG_S": true
+    },
+    "rBG": {
+      "statistic": 3.2380316061526453,
+      "p_value": 0.001203574749877534,
+      "favors_crBG_S": true
+    },
+    "trBG": {
+      "statistic": 10.311755109990917,
+      "p_value": 0.0,
+      "favors_crBG_S": true
+    },
+    "crBG": {
+      "statistic": 1.310385027568169,
+      "p_value": 0.1900656161048797,
+      "favors_crBG_S": true
+    },
+    "tBG-S": {
+      "statistic": 3.6800586179941375,
+      "p_value": 0.00023318034565877888,
+      "favors_crBG_S": true
+    },
+    "trBG-S": {
+      "statistic": 9.897469672318532,
+      "p_value": 0.0,
+      "favors_crBG_S": true
+    }
+  },
+  "MSFT": {
+    "BG": {
+      "statistic": 2.9313003576575993,
+      "p_value": 0.0033754624811526135,
+      "favors_crBG_S": true
+    },
+    "tBG": {
+      "statistic": 2.797246063966879,
+      "p_value": 0.005154026422800939,
+      "favors_crBG_S": true
+    },
+    "rBG": {
+      "statistic": 5.1050722627156695,
+      "p_value": 3.306681306547432e-07,
+      "favors_crBG_S": true
+    },
+    "trBG": {
+      "statistic": 8.208707200911187,
+      "p_value": 2.220446049250313e-16,
+      "favors_crBG_S": true
+    },
+    "crBG": {
+      "statistic": -7.406255243233051e-06,
+      "p_value": 0.999994090663288,
+      "favors_crBG_S": false
+    },
+    "tBG-S": {
+      "statistic": 2.6753813900730674,
+      "p_value": 0.007464428056341399,
+      "favors_crBG_S": true
+    },
+    "trBG-S": {
+      "statistic": 7.9190738601849215,
+      "p_value": 2.4424906541753444e-15,
+      "favors_crBG_S": true
+    }
+  },
+  "INTC": {
+    "BG": {
+      "statistic": 2.1747145574427162,
+      "p_value": 0.02965151331357796,
+      "favors_crBG_S": true
+    },
+    "tBG": {
+      "statistic": 1.8236138823617176,
+      "p_value": 0.06821046633964833,
+      "favors_crBG_S": true
+    },
+    "rBG": {
+      "statistic": 6.485099754818897,
+      "p_value": 8.86730688876014e-11,
+      "favors_crBG_S": true
+    },
+    "trBG": {
+      "statistic": 7.369154917560993,
+      "p_value": 1.716404796070492e-13,
+      "favors_crBG_S": true
+    },
+    "crBG": {
+      "statistic": -9.114911908304359e-05,
+      "p_value": 0.9999272735252536,
+      "favors_crBG_S": false
+    },
+    "tBG-S": {
+      "statistic": 1.803646644341318,
+      "p_value": 0.07128671885638149,
+      "favors_crBG_S": true
+    },
+    "trBG-S": {
+      "statistic": 8.15070803234088,
+      "p_value": 4.440892098500626e-16,
+      "favors_crBG_S": true
+    }
+  },
+  "CSCO": {
+    "BG": {
+      "statistic": 4.445111550105244,
+      "p_value": 8.78462739706265e-06,
+      "favors_crBG_S": true
+    },
+    "tBG": {
+      "statistic": 4.496998869974703,
+      "p_value": 6.891935430131113e-06,
+      "favors_crBG_S": true
+    },
+    "rBG": {
+      "statistic": 6.583726284677779,
+      "p_value": 4.588018853723952e-11,
+      "favors_crBG_S": true
+    },
+    "trBG": {
+      "statistic": 9.105548348858996,
+      "p_value": 0.0,
+      "favors_crBG_S": true
+    },
+    "crBG": {
+      "statistic": 5.389591479785983e-05,
+      "p_value": 0.9999569972817133,
+      "favors_crBG_S": true
+    },
+    "tBG-S": {
+      "statistic": 4.452507049868768,
+      "p_value": 8.487345269925228e-06,
+      "favors_crBG_S": true
+    },
+    "trBG-S": {
+      "statistic": 10.735205027734638,
+      "p_value": 0.0,
+      "favors_crBG_S": true
+    }
+  },
+  "GE": {
+    "BG": {
+      "statistic": 1.2323297177575494,
+      "p_value": 0.21782594305908565,
+      "favors_crBG_S": true
+    },
+    "tBG": {
+      "statistic": 1.9980441057874032,
+      "p_value": 0.04571187862561765,
+      "favors_crBG_S": true
+    },
+    "rBG": {
+      "statistic": 4.9431387500624,
+      "p_value": 7.687473040363102e-07,
+      "favors_crBG_S": true
+    },
+    "trBG": {
+      "statistic": 8.809824914927077,
+      "p_value": 0.0,
+      "favors_crBG_S": true
+    },
+    "crBG": {
+      "statistic": 5.2209157430560485e-06,
+      "p_value": 0.9999958343119353,
+      "favors_crBG_S": true
+    },
+    "tBG-S": {
+      "statistic": 1.3340387306759645,
+      "p_value": 0.18219116370715027,
+      "favors_crBG_S": true
+    },
+    "trBG-S": {
+      "statistic": 8.71461301630069,
+      "p_value": 0.0,
+      "favors_crBG_S": true
+    }
+  }
+}

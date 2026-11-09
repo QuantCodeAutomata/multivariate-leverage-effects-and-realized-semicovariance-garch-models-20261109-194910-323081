@@ -25,7 +25,7 @@ from data.data_loader import load_ohlcv
 from src import config
 from src.dcc import (
     DCC_MODEL_NAMES, average_correlation, build_dcc_regressors, fit_dcc,
-    realized_correlation, standardized_returns, std_correlation,
+    realized_correlation, standardized_returns, std_correlation, to_correlation,
 )
 from src.forecast_eval import frobenius_loss, mcs_included, model_confidence_set, qlike_loss
 from src.matrix_garch import run_recursion
@@ -99,8 +99,7 @@ def oos_forecast_system(data: dict, h_uni: np.ndarray, window: int, step: int) -
         for name in DCC_MODEL_NAMES:
             fit = fit_dcc(regs_est[name], z_est, q_bar)
             Q_path = run_recursion(fit["beta"], fit["coefs"], regs_fore[name], q_bar)
-            d = np.sqrt(np.clip(np.diagonal(Q_path, axis1=-2, axis2=-1), 1e-12, None))
-            R_path = Q_path / (d[:, :, None] * d[:, None, :])
+            R_path = to_correlation(Q_path)
             Dmat = np.sqrt(h_uni[t - 1:t - 1 + horizon + 1])
             H_path = R_path * Dmat[:, :, None] * Dmat[:, None, :]
             forecasts[name].extend(list(H_path[1:1 + horizon]))

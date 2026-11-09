@@ -75,12 +75,12 @@ def oos_forecast_one_stock(data: dict, window: int, step: int) -> dict[str, dict
             from src.matrix_garch import fit_covariance_targeted_garch
             fits[name] = fit_covariance_targeted_garch(regs[name], r[est_slice], h_bar)
         horizon = min(step, T - t)
-        for name in MODEL_NAMES:
-            fit = fits[name]
-            full_regs = build_regressors(r[t - 1:t - 1 + horizon + 1], RCOV[t - 1:t - 1 + horizon + 1],
+        full_regs_all = build_regressors(r[t - 1:t - 1 + horizon + 1], RCOV[t - 1:t - 1 + horizon + 1],
                                           P[t - 1:t - 1 + horizon + 1], N[t - 1:t - 1 + horizon + 1],
                                           Mp[t - 1:t - 1 + horizon + 1], Mn[t - 1:t - 1 + horizon + 1])
-            H_path = run_recursion(fit["beta"], fit["coefs"], full_regs, h_bar)
+        for name in MODEL_NAMES:
+            fit = fits[name]
+            H_path = run_recursion(fit["beta"], fit["coefs"], full_regs_all[name], h_bar)
             forecasts[name].extend(list(H_path[1:1 + horizon]))
         realized_oos.extend(list(RCOV[t:t + horizon]))
         t += step
